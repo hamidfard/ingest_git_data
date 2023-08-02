@@ -1,0 +1,32 @@
+{
+    "continuous": false,
+    "channel": "CURRENT",
+    "photon": false,
+    "libraries": [
+        {
+            "notebook": {
+                "path": "<path to define_dlt notebook>"
+            }
+        }
+    ],
+    "name": "Transform GitHub data",
+    "edition": "ADVANCED",
+    "clusters": [
+        {
+            "label": "default",
+            "num_workers": 0,
+            "policy_id": "001DB5FD0ED36A1C"
+        },
+        {
+            "label": "maintenance",
+            "policy_id": "001DB5FD0ED36A1C"
+        }
+    ],
+    "development": true,
+    "configuration": {
+        "commits-path": "<path to the commits-path folder in DBFS>",
+        "contribs-path": "<path to the contribs-path folder in DBFS>"
+    },
+    "target": "github_tables",
+    "data_sampling": false
+}

@@ -1,0 +1,85 @@
+{
+    "job_id": 203922168383589,
+    "creator_user_name": "<your user name>",
+    "run_as_user_name": "<your user name>",
+    "run_as_owner": true,
+    "settings": {
+        "name": "GitHub analysis workflow",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "webhook_notifications": {},
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "get_commits",
+                "spark_python_task": {
+                    "python_file": "<path of the fetch_git.py script in DBFS>",
+                    "parameters": [
+                        "<owner>",
+                        "<repo>",
+                        "commits",
+                        "<DBFS-output-dir>",
+                        "<scope-name>",
+                        "<github-token-key>"
+                    ]
+                },
+                "existing_cluster_id": "<your cluster ID>",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "get_contributors",
+                "spark_python_task": {
+                    "python_file": "<path of the fetch_git.py script in DBFS>",
+                    "parameters": [
+                        "<owner>",
+                        "<repo>",
+                        "contributors",
+                        "<DBFS-output-dir>",
+                        "<scope-name>",
+                        "<github-token-key>"
+                    ]
+                },
+                "existing_cluster_id": "<your cluster ID>",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "transform_github_data",
+                "depends_on": [
+                    {
+                        "task_key": "get_contributors"
+                    },
+                    {
+                        "task_key": "get_commits"
+                    }
+                ],
+                "pipeline_task": {
+                    "pipeline_id": "<your DLT pipeline ID>",
+                    "full_refresh": false
+                },
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1690985827333
+}
